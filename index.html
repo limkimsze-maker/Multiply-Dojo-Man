@@ -1,0 +1,962 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Multiplication Power Blast</title>
+
+<style>
+  * {
+    box-sizing: border-box;
+  }
+
+  body {
+    margin: 0;
+    font-family: "Comic Sans MS", "Comic Neue", Arial, sans-serif;
+    background: linear-gradient(180deg, #fff7d6, #dff5ff);
+    color: #243047;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  .app {
+    width: min(1100px, 100%);
+    margin: 0 auto;
+    padding: 14px;
+  }
+
+  header {
+    text-align: center;
+    background: #ffffffdd;
+    border: 4px solid #ffd65a;
+    border-radius: 24px;
+    padding: 12px;
+    box-shadow: 0 8px 0 #f0b429;
+  }
+
+  h1 {
+    margin: 0;
+    font-size: clamp(26px, 5vw, 44px);
+    color: #ff7a00;
+    text-shadow: 2px 2px #fff1a8;
+  }
+
+  .subtitle {
+    font-size: clamp(15px, 2.5vw, 20px);
+    margin-top: 6px;
+    font-weight: bold;
+  }
+
+  .top-panel {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 12px;
+    margin-top: 14px;
+  }
+
+  .card {
+    background: white;
+    border-radius: 20px;
+    border: 3px solid #8fd3ff;
+    padding: 12px;
+    box-shadow: 0 6px 0 #67b7e8;
+  }
+
+  .card h2 {
+    margin: 0 0 8px;
+    font-size: 18px;
+  }
+
+  select,
+  button {
+    font-family: inherit;
+    font-weight: bold;
+  }
+
+  select {
+    width: 100%;
+    padding: 10px;
+    border-radius: 14px;
+    border: 3px solid #ffca3a;
+    font-size: 17px;
+    background: #fffdf2;
+  }
+
+  .status-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 8px;
+    font-size: 17px;
+    font-weight: bold;
+  }
+
+  .hearts {
+    font-size: 24px;
+    letter-spacing: 3px;
+  }
+
+  .power-wrap {
+    height: 28px;
+    background: #e9eef7;
+    border-radius: 999px;
+    border: 3px solid #60708f;
+    overflow: hidden;
+  }
+
+  .power-fill {
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(90deg, #ffdd33, #ff8c00, #ff3131);
+    transition: width 0.35s ease;
+  }
+
+  .battlefield {
+    position: relative;
+    margin-top: 16px;
+    min-height: 330px;
+    background:
+      radial-gradient(circle at 50% 20%, #ffffffaa, transparent 35%),
+      linear-gradient(180deg, #a9e9ff 0%, #e9fbff 60%, #8bd36f 60%, #52b352 100%);
+    border-radius: 28px;
+    border: 5px solid #ffffff;
+    box-shadow: inset 0 0 0 4px #7ccfff, 0 10px 0 #4fa8d7;
+    overflow: hidden;
+  }
+
+  .ground-line {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 84px;
+    height: 8px;
+    background: #3d9a3d;
+  }
+
+  .hero-zone,
+  .car-zone {
+    position: absolute;
+    bottom: 52px;
+    width: 190px;
+    height: 230px;
+  }
+
+  .hero-zone {
+    left: 5%;
+  }
+
+  .car-zone {
+    right: 5%;
+    width: 250px;
+    height: 180px;
+  }
+
+  .aura {
+    position: absolute;
+    left: 32px;
+    top: 8px;
+    width: 120px;
+    height: 190px;
+    background: radial-gradient(circle, #fff37a 0%, #ffd21f 40%, #ff981f88 70%, transparent 72%);
+    border-radius: 55% 55% 45% 45%;
+    opacity: 0.25;
+    transform: scale(0.9);
+    transition: 0.3s;
+    filter: blur(1px);
+  }
+
+  .hero-zone.power1 .aura {
+    opacity: 0.45;
+    transform: scale(1);
+  }
+
+  .hero-zone.power2 .aura {
+    opacity: 0.65;
+    transform: scale(1.08);
+    animation: auraPulse 0.8s infinite alternate;
+  }
+
+  .hero-zone.power3 .aura {
+    opacity: 0.9;
+    transform: scale(1.18);
+    animation: auraPulse 0.35s infinite alternate;
+  }
+
+  @keyframes auraPulse {
+    from { filter: brightness(1); }
+    to { filter: brightness(1.35); }
+  }
+
+  .hero {
+    position: absolute;
+    left: 42px;
+    top: 45px;
+    width: 100px;
+    height: 150px;
+  }
+
+  .hair {
+    position: absolute;
+    left: 21px;
+    top: -32px;
+    width: 60px;
+    height: 70px;
+    background: #ffd21f;
+    clip-path: polygon(50% 0%, 61% 30%, 88% 7%, 75% 43%, 100% 36%, 72% 60%, 88% 100%, 50% 72%, 12% 100%, 28% 60%, 0% 36%, 25% 43%, 12% 7%, 39% 30%);
+    filter: drop-shadow(0 0 8px #ffef70);
+  }
+
+  .head {
+    position: absolute;
+    left: 28px;
+    top: 18px;
+    width: 48px;
+    height: 48px;
+    background: #ffd0a6;
+    border-radius: 50%;
+    border: 3px solid #593a28;
+  }
+
+  .eye {
+    position: absolute;
+    top: 20px;
+    width: 7px;
+    height: 4px;
+    background: #111;
+    border-radius: 50%;
+  }
+
+  .eye.left {
+    left: 12px;
+  }
+
+  .eye.right {
+    right: 12px;
+  }
+
+  .body {
+    position: absolute;
+    left: 26px;
+    top: 64px;
+    width: 52px;
+    height: 58px;
+    background: #ff8a00;
+    border: 3px solid #593a28;
+    border-radius: 14px;
+  }
+
+  .belt {
+    position: absolute;
+    left: 25px;
+    top: 108px;
+    width: 54px;
+    height: 10px;
+    background: #1d4ed8;
+    border-radius: 10px;
+  }
+
+  .arm {
+    position: absolute;
+    top: 72px;
+    width: 56px;
+    height: 16px;
+    background: #ffd0a6;
+    border: 3px solid #593a28;
+    border-radius: 999px;
+    transform-origin: right center;
+  }
+
+  .arm.left {
+    left: -8px;
+    transform: rotate(-20deg);
+  }
+
+  .arm.right {
+    right: -8px;
+    transform: rotate(20deg);
+  }
+
+  .leg {
+    position: absolute;
+    top: 118px;
+    width: 24px;
+    height: 42px;
+    background: #1d4ed8;
+    border: 3px solid #593a28;
+    border-radius: 12px;
+  }
+
+  .leg.left {
+    left: 25px;
+  }
+
+  .leg.right {
+    right: 25px;
+  }
+
+  .hero-zone.blasting .hero {
+    animation: heroShake 0.12s infinite alternate;
+  }
+
+  @keyframes heroShake {
+    from { transform: translateX(-2px); }
+    to { transform: translateX(2px); }
+  }
+
+  .beam {
+    position: absolute;
+    left: 170px;
+    top: 130px;
+    height: 48px;
+    width: 0;
+    background: linear-gradient(90deg, #ffffff, #6ee7ff, #1d4ed8);
+    border-radius: 999px;
+    box-shadow: 0 0 20px #3befff, 0 0 40px #3befff;
+    opacity: 0;
+    z-index: 5;
+  }
+
+  .beam.fire {
+    animation: fireBeam 0.8s ease-out forwards;
+  }
+
+  @keyframes fireBeam {
+    0% {
+      width: 0;
+      opacity: 0;
+    }
+    20% {
+      opacity: 1;
+    }
+    70% {
+      width: calc(100vw - 430px);
+      opacity: 1;
+    }
+    100% {
+      width: calc(100vw - 430px);
+      opacity: 0;
+    }
+  }
+
+  .car {
+    position: absolute;
+    left: 10px;
+    bottom: 12px;
+    width: 220px;
+    height: 90px;
+    transition: 0.3s;
+  }
+
+  .car-body {
+    position: absolute;
+    left: 12px;
+    bottom: 28px;
+    width: 190px;
+    height: 56px;
+    background: #ef4444;
+    border: 4px solid #5f1f1f;
+    border-radius: 28px 36px 18px 18px;
+  }
+
+  .car-top {
+    position: absolute;
+    left: 62px;
+    bottom: 68px;
+    width: 85px;
+    height: 48px;
+    background: #f87171;
+    border: 4px solid #5f1f1f;
+    border-radius: 30px 30px 4px 4px;
+  }
+
+  .window {
+    position: absolute;
+    background: #c7f3ff;
+    border: 3px solid #2b6170;
+    top: 10px;
+    width: 28px;
+    height: 22px;
+  }
+
+  .window.one {
+    left: 12px;
+    border-radius: 14px 2px 2px 2px;
+  }
+
+  .window.two {
+    right: 12px;
+    border-radius: 2px 14px 2px 2px;
+  }
+
+  .wheel {
+    position: absolute;
+    bottom: 8px;
+    width: 42px;
+    height: 42px;
+    background: #222;
+    border-radius: 50%;
+    border: 6px solid #555;
+  }
+
+  .wheel.left {
+    left: 38px;
+  }
+
+  .wheel.right {
+    right: 38px;
+  }
+
+  .smoke {
+    position: absolute;
+    left: 8px;
+    top: 14px;
+    font-size: 38px;
+    opacity: 0;
+  }
+
+  .crack {
+    position: absolute;
+    right: 71px;
+    top: -30px;
+    font-size: 34px;
+    opacity: 0;
+  }
+
+  .ko {
+    position: absolute;
+    right: 6px;
+    top: -42px;
+    background: #fff;
+    color: #ff3131;
+    border: 4px solid #ff3131;
+    border-radius: 14px;
+    padding: 4px 10px;
+    font-size: 28px;
+    font-weight: bold;
+    opacity: 0;
+    transform: rotate(12deg);
+  }
+
+  .car.damage1 .smoke {
+    opacity: 1;
+  }
+
+  .car.damage2 .smoke {
+    opacity: 1;
+  }
+
+  .car.damage2 .crack {
+    opacity: 1;
+  }
+
+  .car.damage3 {
+    transform: rotate(-2deg);
+  }
+
+  .car.damage3 .smoke,
+  .car.damage3 .crack {
+    opacity: 1;
+  }
+
+  .car.damage3 .wheel.right {
+    transform: rotate(18deg);
+  }
+
+  .car.damage4 {
+    transform: rotate(-5deg) translateY(8px);
+  }
+
+  .car.damage4 .smoke,
+  .car.damage4 .crack,
+  .car.damage4 .ko {
+    opacity: 1;
+  }
+
+  .car.damage4 .car-body {
+    background: #8b5e5e;
+  }
+
+  .question-panel {
+    margin-top: 18px;
+    display: grid;
+    grid-template-columns: 1.2fr 2fr;
+    gap: 14px;
+  }
+
+  .question-box {
+    text-align: center;
+  }
+
+  .question {
+    font-size: clamp(34px, 8vw, 64px);
+    font-weight: bold;
+    color: #1d4ed8;
+    margin: 8px 0;
+  }
+
+  .answer-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+  }
+
+  .answer-btn,
+  .main-btn {
+    border: none;
+    border-radius: 18px;
+    padding: 15px;
+    font-size: clamp(20px, 4vw, 30px);
+    cursor: pointer;
+    box-shadow: 0 6px 0 #8a6d00;
+    background: #ffdf5a;
+    color: #243047;
+    transition: 0.1s;
+  }
+
+  .answer-btn:active,
+  .main-btn:active {
+    transform: translateY(5px);
+    box-shadow: 0 1px 0 #8a6d00;
+  }
+
+  .answer-btn.correct {
+    background: #7ee787;
+    box-shadow: 0 6px 0 #2f8a3d;
+  }
+
+  .answer-btn.wrong {
+    background: #ff8a8a;
+    box-shadow: 0 6px 0 #b83232;
+  }
+
+  .blast-btn {
+    width: 100%;
+    margin-top: 12px;
+    background: linear-gradient(180deg, #88f7ff, #3086ff);
+    color: white;
+    box-shadow: 0 6px 0 #174ea6;
+    display: none;
+  }
+
+  .blast-btn.show {
+    display: block;
+    animation: pop 0.6s infinite alternate;
+  }
+
+  @keyframes pop {
+    from { transform: scale(1); }
+    to { transform: scale(1.03); }
+  }
+
+  .message {
+    margin-top: 10px;
+    min-height: 42px;
+    font-size: clamp(17px, 3vw, 23px);
+    font-weight: bold;
+    text-align: center;
+    color: #b45309;
+  }
+
+  .small {
+    font-size: 14px;
+    color: #4b5563;
+    line-height: 1.35;
+  }
+
+  .footer {
+    text-align: center;
+    margin: 14px 0 4px;
+    font-size: 14px;
+    color: #374151;
+    font-weight: bold;
+  }
+
+  .victory {
+    position: absolute;
+    inset: 0;
+    background: #ffffffdd;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    z-index: 20;
+    padding: 20px;
+  }
+
+  .victory.show {
+    display: flex;
+  }
+
+  .victory-card {
+    background: #fff7d6;
+    border: 5px solid #ffb703;
+    border-radius: 30px;
+    padding: 22px;
+    max-width: 560px;
+    box-shadow: 0 10px 0 #d97706;
+  }
+
+  .victory h2 {
+    font-size: clamp(34px, 8vw, 56px);
+    color: #ff7a00;
+    margin: 0 0 10px;
+  }
+
+  .dance {
+    font-size: 54px;
+    animation: dance 0.35s infinite alternate;
+  }
+
+  @keyframes dance {
+    from { transform: rotate(-8deg) translateY(0); }
+    to { transform: rotate(8deg) translateY(-8px); }
+  }
+
+  @media (max-width: 760px) {
+    .top-panel,
+    .question-panel {
+      grid-template-columns: 1fr;
+    }
+
+    .battlefield {
+      min-height: 300px;
+    }
+
+    .hero-zone {
+      left: 0;
+      transform: scale(0.82);
+      transform-origin: bottom left;
+    }
+
+    .car-zone {
+      right: -22px;
+      transform: scale(0.82);
+      transform-origin: bottom right;
+    }
+
+    .beam {
+      left: 120px;
+      top: 138px;
+    }
+
+    @keyframes fireBeam {
+      0% {
+        width: 0;
+        opacity: 0;
+      }
+      20% {
+        opacity: 1;
+      }
+      70% {
+        width: calc(100vw - 250px);
+        opacity: 1;
+      }
+      100% {
+        width: calc(100vw - 250px);
+        opacity: 0;
+      }
+    }
+  }
+</style>
+</head>
+
+<body>
+<div class="app">
+  <header>
+    <h1>⚡ Multiplication Power Blast ⚡</h1>
+    <div class="subtitle">Get 3 correct answers in a row to charge your hero. 4 blasts will spoil the car!</div>
+  </header>
+
+  <section class="top-panel">
+    <div class="card">
+      <h2>Choose Practice</h2>
+      <select id="tableSelect">
+        <option value="mixed">Mixed ×2 to ×9</option>
+        <option value="2">2 times table</option>
+        <option value="3">3 times table</option>
+        <option value="4">4 times table</option>
+        <option value="5">5 times table</option>
+        <option value="6">6 times table</option>
+        <option value="7">7 times table</option>
+        <option value="8">8 times table</option>
+        <option value="9">9 times table</option>
+      </select>
+      <button class="main-btn" style="width:100%; margin-top:10px;" onclick="restartGame()">Restart Game</button>
+    </div>
+
+    <div class="card">
+      <h2>Power Charge</h2>
+      <div class="status-row">
+        <span>Streak</span>
+        <span id="streakText">0 / 3</span>
+      </div>
+      <div class="power-wrap">
+        <div class="power-fill" id="powerFill"></div>
+      </div>
+      <div class="small">Correct answers fill the power meter. A wrong answer resets the current streak only.</div>
+    </div>
+
+    <div class="card">
+      <h2>Car HP</h2>
+      <div class="status-row">
+        <span>Blasts</span>
+        <span id="blastText">0 / 4</span>
+      </div>
+      <div class="hearts" id="hearts">❤️❤️❤️❤️</div>
+      <div class="small">Each energy blast removes 1 HP from the car.</div>
+    </div>
+  </section>
+
+  <section class="battlefield">
+    <div class="ground-line"></div>
+
+    <div class="hero-zone" id="heroZone">
+      <div class="aura"></div>
+      <div class="hero">
+        <div class="hair"></div>
+        <div class="head">
+          <div class="eye left"></div>
+          <div class="eye right"></div>
+        </div>
+        <div class="body"></div>
+        <div class="belt"></div>
+        <div class="arm left"></div>
+        <div class="arm right"></div>
+        <div class="leg left"></div>
+        <div class="leg right"></div>
+      </div>
+    </div>
+
+    <div class="beam" id="beam"></div>
+
+    <div class="car-zone">
+      <div class="car" id="car">
+        <div class="smoke">💨</div>
+        <div class="crack">⚡</div>
+        <div class="ko">KO!</div>
+        <div class="car-top">
+          <div class="window one"></div>
+          <div class="window two"></div>
+        </div>
+        <div class="car-body"></div>
+        <div class="wheel left"></div>
+        <div class="wheel right"></div>
+      </div>
+    </div>
+
+    <div class="victory" id="victory">
+      <div class="victory-card">
+        <div class="dance">🕺⚡</div>
+        <h2>Mission Complete!</h2>
+        <p style="font-size:22px; font-weight:bold;">
+          The car is spoilt! Your Math Energy Hero does a silly victory dance!
+        </p>
+        <button class="main-btn" onclick="restartGame()">Play Again</button>
+      </div>
+    </div>
+  </section>
+
+  <section class="question-panel">
+    <div class="card question-box">
+      <h2>Question</h2>
+      <div class="question" id="question">3 × 4</div>
+      <button class="main-btn blast-btn" id="blastBtn" onclick="releaseBlast()">Release Energy Blast!</button>
+      <div class="message" id="message">Answer correctly to charge your power!</div>
+    </div>
+
+    <div class="card">
+      <h2>Choose the Answer</h2>
+      <div class="answer-grid" id="answers"></div>
+    </div>
+  </section>
+
+  <div class="footer">
+    Designed by Lim Kim Sze © 2026
+  </div>
+</div>
+
+<script>
+  let currentA = 0;
+  let currentB = 0;
+  let correctAnswer = 0;
+
+  let streak = 0;
+  let blasts = 0;
+  let locked = false;
+  let gameComplete = false;
+
+  const questionEl = document.getElementById("question");
+  const answersEl = document.getElementById("answers");
+  const messageEl = document.getElementById("message");
+  const streakText = document.getElementById("streakText");
+  const blastText = document.getElementById("blastText");
+  const powerFill = document.getElementById("powerFill");
+  const heroZone = document.getElementById("heroZone");
+  const car = document.getElementById("car");
+  const beam = document.getElementById("beam");
+  const blastBtn = document.getElementById("blastBtn");
+  const hearts = document.getElementById("hearts");
+  const victory = document.getElementById("victory");
+  const tableSelect = document.getElementById("tableSelect");
+
+  function rand(min, max) {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+  }
+
+  function shuffle(array) {
+    return array.sort(() => Math.random() - 0.5);
+  }
+
+  function makeQuestion() {
+    if (gameComplete) return;
+
+    locked = false;
+    blastBtn.classList.remove("show");
+
+    const selected = tableSelect.value;
+
+    if (selected === "mixed") {
+      currentA = rand(2, 9);
+    } else {
+      currentA = Number(selected);
+    }
+
+    currentB = rand(2, 9);
+    correctAnswer = currentA * currentB;
+
+    questionEl.textContent = `${currentA} × ${currentB}`;
+
+    const options = new Set();
+    options.add(correctAnswer);
+
+    while (options.size < 4) {
+      let wrong = correctAnswer + rand(-12, 12);
+      if (wrong > 0 && wrong !== correctAnswer) {
+        options.add(wrong);
+      }
+    }
+
+    const finalOptions = shuffle([...options]);
+
+    answersEl.innerHTML = "";
+    finalOptions.forEach(value => {
+      const btn = document.createElement("button");
+      btn.className = "answer-btn";
+      btn.textContent = value;
+      btn.onclick = () => checkAnswer(btn, value);
+      answersEl.appendChild(btn);
+    });
+  }
+
+  function checkAnswer(button, value) {
+    if (locked || gameComplete) return;
+
+    const allButtons = document.querySelectorAll(".answer-btn");
+
+    if (value === correctAnswer) {
+      button.classList.add("correct");
+      streak++;
+
+      if (streak >= 3) {
+        streak = 3;
+        locked = true;
+        messageEl.textContent = "Power ready! Press Release Energy Blast!";
+        blastBtn.classList.add("show");
+        allButtons.forEach(btn => btn.disabled = true);
+      } else {
+        messageEl.textContent = streak === 1
+          ? "Good! Power is charging!"
+          : "Combo! One more correct answer to blast!";
+        locked = true;
+        allButtons.forEach(btn => btn.disabled = true);
+        setTimeout(makeQuestion, 750);
+      }
+    } else {
+      button.classList.add("wrong");
+      streak = 0;
+      locked = true;
+      messageEl.textContent = "Oops! Streak reset. Try the next one!";
+      allButtons.forEach(btn => btn.disabled = true);
+      setTimeout(makeQuestion, 950);
+    }
+
+    updateUI();
+  }
+
+  function releaseBlast() {
+    if (streak < 3 || gameComplete) return;
+
+    locked = true;
+    blastBtn.classList.remove("show");
+    heroZone.classList.add("blasting");
+    beam.classList.remove("fire");
+
+    void beam.offsetWidth;
+    beam.classList.add("fire");
+
+    messageEl.textContent = "Energy Blast!";
+
+    setTimeout(() => {
+      blasts++;
+      streak = 0;
+      heroZone.classList.remove("blasting");
+      updateUI();
+
+      if (blasts >= 4) {
+        completeGame();
+      } else {
+        messageEl.textContent = "Nice blast! Charge again for the next attack!";
+        setTimeout(makeQuestion, 700);
+      }
+    }, 850);
+  }
+
+  function updateUI() {
+    streakText.textContent = `${streak} / 3`;
+    blastText.textContent = `${blasts} / 4`;
+
+    const powerPercent = (streak / 3) * 100;
+    powerFill.style.width = `${powerPercent}%`;
+
+    heroZone.classList.remove("power1", "power2", "power3");
+    if (streak === 1) heroZone.classList.add("power1");
+    if (streak === 2) heroZone.classList.add("power2");
+    if (streak === 3) heroZone.classList.add("power3");
+
+    car.className = "car";
+    if (blasts >= 1) car.classList.add("damage1");
+    if (blasts >= 2) car.classList.add("damage2");
+    if (blasts >= 3) car.classList.add("damage3");
+    if (blasts >= 4) car.classList.add("damage4");
+
+    const hpLeft = Math.max(0, 4 - blasts);
+    hearts.textContent = "❤️".repeat(hpLeft) + "🖤".repeat(4 - hpLeft);
+  }
+
+  function completeGame() {
+    gameComplete = true;
+    messageEl.textContent = "Mission complete! Well done!";
+    victory.classList.add("show");
+
+    document.querySelectorAll(".answer-btn").forEach(btn => {
+      btn.disabled = true;
+    });
+  }
+
+  function restartGame() {
+    streak = 0;
+    blasts = 0;
+    locked = false;
+    gameComplete = false;
+    victory.classList.remove("show");
+    messageEl.textContent = "Answer correctly to charge your power!";
+    updateUI();
+    makeQuestion();
+  }
+
+  tableSelect.addEventListener("change", restartGame);
+
+  restartGame();
+</script>
+</body>
+  </html>
