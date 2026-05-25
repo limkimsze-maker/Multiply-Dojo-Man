@@ -2,485 +2,747 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Multiplication Power Blast</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<title>Multiplication Wizard: Rescue the Trapped Hamster!</title>
 
 <style>
-  * {
-    box-sizing: border-box;
+  * { box-sizing: border-box; }
+
+  :root {
+    --bg1: #eaf8ff;
+    --bg2: #fff7d6;
+    --card: #ffffff;
+    --ink: #243047;
+    --blue: #5cb6ff;
+    --yellow: #ffd94d;
+    --yellow-dark: #d6a300;
+    --green: #7be495;
+    --green-dark: #2d9a58;
+    --red: #ff8b8b;
+    --red-dark: #c94b4b;
+    --purple: #8b5cf6;
+  }
+
+  html,
+  body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    max-width: 100%;
+    overflow-x: hidden;
+    font-family: "Comic Sans MS", "Comic Neue", Arial, sans-serif;
+    color: var(--ink);
+    background: linear-gradient(180deg, var(--bg2), var(--bg1));
   }
 
   body {
-    margin: 0;
-    font-family: "Comic Sans MS", "Comic Neue", Arial, sans-serif;
-    background: linear-gradient(180deg, #fff7d6, #dff5ff);
-    color: #243047;
     min-height: 100vh;
-    overflow-x: hidden;
+    touch-action: manipulation;
   }
 
   .app {
-    width: min(1100px, 100%);
+    width: min(1120px, 100%);
     margin: 0 auto;
-    padding: 14px;
+    padding: clamp(8px, 2.5vw, 14px);
   }
 
-  header {
-    text-align: center;
-    background: #ffffffdd;
-    border: 4px solid #ffd65a;
+  .title-card {
+    background: rgba(255, 255, 255, 0.94);
+    border: 4px solid var(--yellow);
     border-radius: 24px;
-    padding: 12px;
-    box-shadow: 0 8px 0 #f0b429;
+    box-shadow: 0 8px 0 var(--yellow-dark);
+    padding: 12px 16px;
+    text-align: center;
   }
 
   h1 {
     margin: 0;
-    font-size: clamp(26px, 5vw, 44px);
+    font-size: clamp(28px, 5vw, 44px);
+    line-height: 1.12;
     color: #ff7a00;
-    text-shadow: 2px 2px #fff1a8;
+    text-shadow: 2px 2px #fff2ad;
   }
 
   .subtitle {
-    font-size: clamp(15px, 2.5vw, 20px);
     margin-top: 6px;
+    font-size: clamp(15px, 2.3vw, 21px);
     font-weight: bold;
+    line-height: 1.35;
   }
 
-  .top-panel {
+  .layout {
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    gap: 12px;
+    grid-template-columns: 1fr;
+    gap: 14px;
     margin-top: 14px;
   }
 
+  .top-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 12px;
+  }
+
+  .bottom-grid {
+    display: grid;
+    grid-template-columns: 1.05fr 1.3fr;
+    gap: 12px;
+  }
+
   .card {
-    background: white;
+    background: var(--card);
+    border: 3px solid #9ad3ff;
     border-radius: 20px;
-    border: 3px solid #8fd3ff;
     padding: 12px;
     box-shadow: 0 6px 0 #67b7e8;
   }
 
   .card h2 {
     margin: 0 0 8px;
-    font-size: 18px;
+    font-size: 20px;
   }
 
   select,
   button {
     font-family: inherit;
     font-weight: bold;
+    min-height: 48px;
   }
 
   select {
     width: 100%;
-    padding: 10px;
+    padding: 10px 12px;
     border-radius: 14px;
-    border: 3px solid #ffca3a;
+    border: 3px solid var(--yellow);
     font-size: 17px;
-    background: #fffdf2;
+    background: #fffdf3;
+  }
+
+  .main-btn,
+  .answer-btn,
+  .spell-btn {
+    border: none;
+    border-radius: 18px;
+    cursor: pointer;
+    font-size: clamp(18px, 3vw, 28px);
+    padding: 14px 16px;
+    transition: transform 0.08s ease;
+  }
+
+  .main-btn:active,
+  .answer-btn:active,
+  .spell-btn:active {
+    transform: translateY(4px);
+  }
+
+  .main-btn {
+    width: 100%;
+    margin-top: 10px;
+    background: var(--yellow);
+    color: var(--ink);
+    box-shadow: 0 6px 0 var(--yellow-dark);
   }
 
   .status-row {
     display: flex;
     justify-content: space-between;
+    gap: 10px;
     align-items: center;
-    gap: 8px;
-    font-size: 17px;
+    font-size: 18px;
     font-weight: bold;
   }
 
-  .hearts {
-    font-size: 24px;
-    letter-spacing: 3px;
-  }
-
-  .power-wrap {
+  .meter {
+    margin-top: 8px;
+    width: 100%;
     height: 28px;
-    background: #e9eef7;
     border-radius: 999px;
-    border: 3px solid #60708f;
+    background: #e7eef8;
+    border: 3px solid #61728f;
     overflow: hidden;
   }
 
-  .power-fill {
+  .meter-fill {
     height: 100%;
     width: 0%;
-    background: linear-gradient(90deg, #ffdd33, #ff8c00, #ff3131);
-    transition: width 0.35s ease;
+    background: linear-gradient(90deg, #fff173, #ffb703, #ff7b00);
+    transition: width 0.3s ease;
+  }
+
+  .stars {
+    font-size: 26px;
+    letter-spacing: 4px;
+  }
+
+  .small {
+    margin-top: 8px;
+    font-size: 14px;
+    line-height: 1.35;
+    color: #556273;
   }
 
   .battlefield {
     position: relative;
-    margin-top: 16px;
-    min-height: 330px;
-    background:
-      radial-gradient(circle at 50% 20%, #ffffffaa, transparent 35%),
-      linear-gradient(180deg, #a9e9ff 0%, #e9fbff 60%, #8bd36f 60%, #52b352 100%);
+    min-height: 350px;
     border-radius: 28px;
-    border: 5px solid #ffffff;
-    box-shadow: inset 0 0 0 4px #7ccfff, 0 10px 0 #4fa8d7;
     overflow: hidden;
+    border: 5px solid #ffffff;
+    box-shadow: inset 0 0 0 4px #84cdfc, 0 10px 0 #4fa8d7;
+    background:
+      radial-gradient(circle at 20% 20%, rgba(255,255,255,0.95), transparent 25%),
+      radial-gradient(circle at 80% 15%, rgba(255,255,255,0.8), transparent 20%),
+      linear-gradient(180deg, #b7eeff 0%, #ebfbff 58%, #97df7f 58%, #5dbe5d 100%);
   }
 
-  .ground-line {
+  .ground {
     position: absolute;
     left: 0;
     right: 0;
-    bottom: 84px;
+    bottom: 74px;
     height: 8px;
-    background: #3d9a3d;
+    background: #3e9f3f;
   }
 
-  .hero-zone,
-  .car-zone {
+  .wizard-zone,
+  .hamster-zone {
     position: absolute;
-    bottom: 52px;
-    width: 190px;
-    height: 230px;
+    bottom: 34px;
   }
 
-  .hero-zone {
-    left: 5%;
+  .wizard-zone {
+    left: 4%;
+    width: 210px;
+    height: 260px;
   }
 
-  .car-zone {
-    right: 5%;
+  .hamster-zone {
+    right: 4%;
     width: 250px;
-    height: 180px;
+    height: 250px;
   }
 
-  .aura {
+  .sparkle-aura {
     position: absolute;
-    left: 32px;
-    top: 8px;
-    width: 120px;
+    left: 18px;
+    top: 24px;
+    width: 150px;
     height: 190px;
-    background: radial-gradient(circle, #fff37a 0%, #ffd21f 40%, #ff981f88 70%, transparent 72%);
-    border-radius: 55% 55% 45% 45%;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(255,241,120,0.75) 0%, rgba(255,211,74,0.45) 35%, rgba(255,180,0,0.12) 60%, transparent 70%);
     opacity: 0.25;
-    transform: scale(0.9);
-    transition: 0.3s;
-    filter: blur(1px);
+    transform: scale(0.95);
+    transition: 0.2s ease;
   }
 
-  .hero-zone.power1 .aura {
-    opacity: 0.45;
+  .wizard-zone.charge1 .sparkle-aura {
+    opacity: 0.48;
     transform: scale(1);
   }
 
-  .hero-zone.power2 .aura {
-    opacity: 0.65;
+  .wizard-zone.charge2 .sparkle-aura {
+    opacity: 0.75;
     transform: scale(1.08);
-    animation: auraPulse 0.8s infinite alternate;
+    animation: pulse 0.7s infinite alternate;
   }
 
-  .hero-zone.power3 .aura {
-    opacity: 0.9;
+  .wizard-zone.charge3 .sparkle-aura {
+    opacity: 0.95;
     transform: scale(1.18);
-    animation: auraPulse 0.35s infinite alternate;
+    animation: pulse 0.32s infinite alternate;
   }
 
-  @keyframes auraPulse {
+  @keyframes pulse {
     from { filter: brightness(1); }
-    to { filter: brightness(1.35); }
+    to { filter: brightness(1.28); }
   }
 
-  .hero {
+  .magic-stars {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0.2;
+  }
+
+  .magic-stars span {
+    position: absolute;
+    font-size: 18px;
+    animation: twinkle 1.1s infinite alternate;
+  }
+
+  .magic-stars span:nth-child(1) { left: 32px; top: 30px; }
+  .magic-stars span:nth-child(2) { left: 138px; top: 56px; animation-delay: 0.2s; }
+  .magic-stars span:nth-child(3) { left: 22px; top: 112px; animation-delay: 0.4s; }
+  .magic-stars span:nth-child(4) { left: 156px; top: 132px; animation-delay: 0.1s; }
+  .magic-stars span:nth-child(5) { left: 80px; top: 16px; animation-delay: 0.3s; }
+
+  .wizard-zone.charge1 .magic-stars,
+  .wizard-zone.charge2 .magic-stars,
+  .wizard-zone.charge3 .magic-stars {
+    opacity: 1;
+  }
+
+  @keyframes twinkle {
+    from { transform: scale(0.9) rotate(-8deg); opacity: 0.6; }
+    to { transform: scale(1.18) rotate(8deg); opacity: 1; }
+  }
+
+  .wizard {
     position: absolute;
     left: 42px;
-    top: 45px;
-    width: 100px;
-    height: 150px;
+    top: 32px;
+    width: 118px;
+    height: 190px;
   }
 
-  .hair {
+  .top-hat {
     position: absolute;
-    left: 21px;
-    top: -32px;
-    width: 60px;
-    height: 70px;
-    background: #ffd21f;
-    clip-path: polygon(50% 0%, 61% 30%, 88% 7%, 75% 43%, 100% 36%, 72% 60%, 88% 100%, 50% 72%, 12% 100%, 28% 60%, 0% 36%, 25% 43%, 12% 7%, 39% 30%);
-    filter: drop-shadow(0 0 8px #ffef70);
+    left: 26px;
+    top: -10px;
+    width: 62px;
+    height: 46px;
+    background: #24153f;
+    border: 3px solid #130c23;
+    border-radius: 10px 10px 6px 6px;
+  }
+
+  .top-hat::before {
+    content: "";
+    position: absolute;
+    left: -13px;
+    bottom: -10px;
+    width: 88px;
+    height: 10px;
+    background: #24153f;
+    border: 3px solid #130c23;
+    border-radius: 999px;
+  }
+
+  .hat-band {
+    position: absolute;
+    left: 6px;
+    top: 15px;
+    width: 46px;
+    height: 8px;
+    background: #ffcc42;
+    border-radius: 999px;
   }
 
   .head {
     position: absolute;
-    left: 28px;
-    top: 18px;
-    width: 48px;
-    height: 48px;
-    background: #ffd0a6;
+    left: 32px;
+    top: 26px;
+    width: 50px;
+    height: 50px;
+    background: #ffd3ad;
+    border: 3px solid #5a3b29;
     border-radius: 50%;
-    border: 3px solid #593a28;
+    z-index: 2;
   }
 
   .eye {
     position: absolute;
     top: 20px;
-    width: 7px;
+    width: 6px;
     height: 4px;
     background: #111;
     border-radius: 50%;
   }
 
-  .eye.left {
-    left: 12px;
+  .eye.left { left: 12px; }
+  .eye.right { right: 12px; }
+
+  .smile {
+    position: absolute;
+    left: 16px;
+    bottom: 10px;
+    width: 16px;
+    height: 9px;
+    border-bottom: 3px solid #7a402f;
+    border-radius: 0 0 18px 18px;
   }
 
-  .eye.right {
-    right: 12px;
-  }
-
-  .body {
+  .robe {
     position: absolute;
     left: 26px;
-    top: 64px;
-    width: 52px;
-    height: 58px;
-    background: #ff8a00;
-    border: 3px solid #593a28;
-    border-radius: 14px;
+    top: 70px;
+    width: 62px;
+    height: 90px;
+    background: var(--purple);
+    border: 3px solid #40236f;
+    border-radius: 18px 18px 12px 12px;
+    z-index: 2;
   }
 
-  .belt {
+  .robe-star {
     position: absolute;
-    left: 25px;
-    top: 108px;
-    width: 54px;
-    height: 10px;
-    background: #1d4ed8;
-    border-radius: 10px;
+    font-size: 14px;
+    color: #ffd94d;
   }
 
-  .arm {
+  .robe-star.s1 { left: 12px; top: 14px; }
+  .robe-star.s2 { right: 12px; top: 28px; }
+  .robe-star.s3 { left: 24px; bottom: 16px; }
+
+  .cape {
     position: absolute;
+    left: 14px;
     top: 72px;
-    width: 56px;
-    height: 16px;
-    background: #ffd0a6;
-    border: 3px solid #593a28;
+    width: 88px;
+    height: 92px;
+    background: #ef4444;
+    border: 3px solid #8b1f1f;
+    clip-path: polygon(10% 0%, 90% 0%, 100% 100%, 0% 100%);
+    z-index: 1;
+  }
+
+  .arm-left,
+  .arm-right {
+    position: absolute;
+    top: 84px;
+    height: 14px;
+    background: #ffd3ad;
+    border: 3px solid #5a3b29;
     border-radius: 999px;
-    transform-origin: right center;
+    z-index: 3;
   }
 
-  .arm.left {
-    left: -8px;
-    transform: rotate(-20deg);
+  .arm-left {
+    left: -2px;
+    width: 40px;
+    transform: rotate(18deg);
   }
 
-  .arm.right {
+  .arm-right {
     right: -8px;
-    transform: rotate(20deg);
+    width: 52px;
+    transform: rotate(-22deg);
+  }
+
+  .wand {
+    position: absolute;
+    right: -22px;
+    top: 94px;
+    width: 58px;
+    height: 6px;
+    background: #5b4120;
+    border-radius: 999px;
+    transform: rotate(-18deg);
+    z-index: 5;
+  }
+
+  .wand::after {
+    content: "★";
+    position: absolute;
+    right: -8px;
+    top: -12px;
+    font-size: 24px;
+    color: #ffd94d;
+    text-shadow: 0 0 8px #fff19a;
+  }
+
+  .legs {
+    position: absolute;
+    left: 32px;
+    bottom: 0;
+    width: 56px;
+    height: 46px;
+    z-index: 2;
   }
 
   .leg {
     position: absolute;
-    top: 118px;
-    width: 24px;
-    height: 42px;
-    background: #1d4ed8;
-    border: 3px solid #593a28;
-    border-radius: 12px;
+    bottom: 0;
+    width: 18px;
+    height: 40px;
+    background: #4b2f1f;
+    border: 3px solid #2f1c12;
+    border-radius: 10px;
   }
 
-  .leg.left {
-    left: 25px;
+  .leg.left { left: 6px; }
+  .leg.right { right: 6px; }
+
+  .shoe {
+    position: absolute;
+    bottom: -2px;
+    width: 22px;
+    height: 10px;
+    background: #1d1d1d;
+    border-radius: 999px;
   }
 
-  .leg.right {
-    right: 25px;
+  .shoe.left { left: 4px; }
+  .shoe.right { right: 4px; }
+
+  .wizard-zone.casting .wizard {
+    animation: castShake 0.12s infinite alternate;
   }
 
-  .hero-zone.blasting .hero {
-    animation: heroShake 0.12s infinite alternate;
-  }
-
-  @keyframes heroShake {
+  @keyframes castShake {
     from { transform: translateX(-2px); }
     to { transform: translateX(2px); }
   }
 
-  .beam {
+  .spell-beam {
     position: absolute;
-    left: 170px;
-    top: 130px;
-    height: 48px;
+    left: 175px;
+    top: 145px;
     width: 0;
-    background: linear-gradient(90deg, #ffffff, #6ee7ff, #1d4ed8);
-    border-radius: 999px;
-    box-shadow: 0 0 20px #3befff, 0 0 40px #3befff;
-    opacity: 0;
-    z-index: 5;
-  }
-
-  .beam.fire {
-    animation: fireBeam 0.8s ease-out forwards;
-  }
-
-  @keyframes fireBeam {
-    0% {
-      width: 0;
-      opacity: 0;
-    }
-    20% {
-      opacity: 1;
-    }
-    70% {
-      width: calc(100vw - 430px);
-      opacity: 1;
-    }
-    100% {
-      width: calc(100vw - 430px);
-      opacity: 0;
-    }
-  }
-
-  .car {
-    position: absolute;
-    left: 10px;
-    bottom: 12px;
-    width: 220px;
-    height: 90px;
-    transition: 0.3s;
-  }
-
-  .car-body {
-    position: absolute;
-    left: 12px;
-    bottom: 28px;
-    width: 190px;
-    height: 56px;
-    background: #ef4444;
-    border: 4px solid #5f1f1f;
-    border-radius: 28px 36px 18px 18px;
-  }
-
-  .car-top {
-    position: absolute;
-    left: 62px;
-    bottom: 68px;
-    width: 85px;
-    height: 48px;
-    background: #f87171;
-    border: 4px solid #5f1f1f;
-    border-radius: 30px 30px 4px 4px;
-  }
-
-  .window {
-    position: absolute;
-    background: #c7f3ff;
-    border: 3px solid #2b6170;
-    top: 10px;
-    width: 28px;
     height: 22px;
-  }
-
-  .window.one {
-    left: 12px;
-    border-radius: 14px 2px 2px 2px;
-  }
-
-  .window.two {
-    right: 12px;
-    border-radius: 2px 14px 2px 2px;
-  }
-
-  .wheel {
-    position: absolute;
-    bottom: 8px;
-    width: 42px;
-    height: 42px;
-    background: #222;
-    border-radius: 50%;
-    border: 6px solid #555;
-  }
-
-  .wheel.left {
-    left: 38px;
-  }
-
-  .wheel.right {
-    right: 38px;
-  }
-
-  .smoke {
-    position: absolute;
-    left: 8px;
-    top: 14px;
-    font-size: 38px;
+    border-radius: 999px;
     opacity: 0;
+    z-index: 15;
+    background: linear-gradient(90deg, #ffffff, #b4f6ff, #6a5cff);
+    box-shadow: 0 0 14px #9eeeff, 0 0 28px #9eeeff, 0 0 40px #8f7dff;
+  }
+
+  .spell-beam.fire {
+    animation: shoot 0.8s ease-out forwards;
+  }
+
+  @keyframes shoot {
+    0% { width: 0; opacity: 0; }
+    15% { opacity: 1; }
+    70% { width: 440px; opacity: 1; }
+    100% { width: 440px; opacity: 0; }
+  }
+
+  .bubble {
+    position: absolute;
+    left: 25px;
+    top: 14px;
+    width: 180px;
+    height: 180px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 35% 28%, rgba(255,255,255,0.95) 0%, rgba(195,241,255,0.75) 18%, rgba(143,221,255,0.35) 50%, rgba(143,221,255,0.18) 68%, rgba(143,221,255,0.1) 100%);
+    border: 4px solid rgba(120,193,255,0.95);
+    box-shadow: inset 0 0 16px rgba(255,255,255,0.9), 0 0 20px rgba(108,205,255,0.5);
+    transition: 0.25s ease;
+    z-index: 3;
+  }
+
+  .bubble-glint {
+    position: absolute;
+    left: 32px;
+    top: 24px;
+    width: 34px;
+    height: 22px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.7);
+    transform: rotate(-25deg);
   }
 
   .crack {
     position: absolute;
-    right: 71px;
-    top: -30px;
-    font-size: 34px;
+    color: #2c92da;
+    font-size: 40px;
+    line-height: 1;
     opacity: 0;
+    transition: 0.2s ease;
   }
 
-  .ko {
+  .cr1 { left: 78px; top: 54px; }
+  .cr2 { left: 44px; top: 88px; }
+  .cr3 { right: 36px; top: 92px; }
+
+  .hamster-zone.stage1 .cr1 { opacity: 0.9; }
+
+  .hamster-zone.stage2 .cr1,
+  .hamster-zone.stage2 .cr2 {
+    opacity: 0.95;
+  }
+
+  .hamster-zone.stage3 .cr1,
+  .hamster-zone.stage3 .cr2,
+  .hamster-zone.stage3 .cr3 {
+    opacity: 1;
+  }
+
+  .hamster-zone.stage4 .bubble {
+    opacity: 0;
+    transform: scale(1.1);
+    pointer-events: none;
+  }
+
+  .hamster {
     position: absolute;
-    right: 6px;
-    top: -42px;
-    background: #fff;
-    color: #ff3131;
-    border: 4px solid #ff3131;
-    border-radius: 14px;
-    padding: 4px 10px;
-    font-size: 28px;
-    font-weight: bold;
+    left: 74px;
+    top: 70px;
+    width: 90px;
+    height: 92px;
+    z-index: 4;
+    transition: transform 0.25s ease;
+  }
+
+  .hamster-zone.stage2 .hamster {
+    transform: translateY(-4px) rotate(-4deg);
+  }
+
+  .hamster-zone.stage3 .hamster {
+    transform: translateY(-6px) rotate(5deg);
+  }
+
+  .hamster-zone.stage4 .hamster {
+    transform: translateY(-10px);
+    animation: happyDance 0.35s infinite alternate;
+  }
+
+  @keyframes happyDance {
+    from { transform: translateY(-10px) rotate(-8deg); }
+    to { transform: translateY(-18px) rotate(8deg); }
+  }
+
+  .ham-body {
+    position: absolute;
+    left: 15px;
+    top: 18px;
+    width: 58px;
+    height: 52px;
+    background: #d4a373;
+    border: 3px solid #7c5c3f;
+    border-radius: 48% 48% 44% 44%;
+  }
+
+  .ham-face {
+    position: absolute;
+    left: 24px;
+    top: 28px;
+    width: 40px;
+    height: 34px;
+    background: #f5e6d3;
+    border-radius: 50%;
+  }
+
+  .ear {
+    position: absolute;
+    top: 8px;
+    width: 18px;
+    height: 18px;
+    background: #d4a373;
+    border: 3px solid #7c5c3f;
+    border-radius: 50%;
+  }
+
+  .ear.left { left: 16px; }
+  .ear.right { right: 14px; }
+
+  .ear::after {
+    content: "";
+    position: absolute;
+    inset: 3px;
+    background: #f6c6cf;
+    border-radius: 50%;
+  }
+
+  .ham-eye {
+    position: absolute;
+    top: 16px;
+    width: 5px;
+    height: 5px;
+    background: #111;
+    border-radius: 50%;
+  }
+
+  .ham-eye.left { left: 10px; }
+  .ham-eye.right { right: 10px; }
+
+  .nose {
+    position: absolute;
+    left: 16px;
+    top: 18px;
+    width: 8px;
+    height: 6px;
+    background: #f08395;
+    border-radius: 50%;
+  }
+
+  .mouth {
+    position: absolute;
+    left: 11px;
+    top: 24px;
+    width: 18px;
+    height: 9px;
+    border-bottom: 2px solid #7c5c3f;
+    border-radius: 0 0 14px 14px;
+  }
+
+  .paw {
+    position: absolute;
+    bottom: 10px;
+    width: 15px;
+    height: 15px;
+    background: #f5e6d3;
+    border: 2px solid #7c5c3f;
+    border-radius: 50%;
+  }
+
+  .paw.left { left: 18px; }
+  .paw.right { right: 16px; }
+
+  .ham-legs {
+    position: absolute;
+    bottom: 0;
+    left: 28px;
+    width: 34px;
+    height: 18px;
+  }
+
+  .ham-foot {
+    position: absolute;
+    bottom: 0;
+    width: 12px;
+    height: 12px;
+    background: #f5e6d3;
+    border: 2px solid #7c5c3f;
+    border-radius: 50%;
+  }
+
+  .ham-foot.left { left: 4px; }
+  .ham-foot.right { right: 4px; }
+
+  .freedom-stars {
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    pointer-events: none;
     opacity: 0;
-    transform: rotate(12deg);
   }
 
-  .car.damage1 .smoke {
+  .hamster-zone.stage4 .freedom-stars {
     opacity: 1;
   }
 
-  .car.damage2 .smoke {
-    opacity: 1;
+  .freedom-stars span {
+    position: absolute;
+    font-size: 22px;
+    animation: twinkle 1s infinite alternate;
   }
 
-  .car.damage2 .crack {
-    opacity: 1;
-  }
+  .freedom-stars span:nth-child(1) { left: 20px; top: 18px; }
+  .freedom-stars span:nth-child(2) { right: 18px; top: 36px; animation-delay: 0.2s; }
+  .freedom-stars span:nth-child(3) { left: 6px; top: 110px; animation-delay: 0.4s; }
+  .freedom-stars span:nth-child(4) { right: 8px; top: 136px; animation-delay: 0.15s; }
+  .freedom-stars span:nth-child(5) { left: 92px; top: 2px; animation-delay: 0.3s; }
 
-  .car.damage3 {
-    transform: rotate(-2deg);
-  }
-
-  .car.damage3 .smoke,
-  .car.damage3 .crack {
-    opacity: 1;
-  }
-
-  .car.damage3 .wheel.right {
-    transform: rotate(18deg);
-  }
-
-  .car.damage4 {
-    transform: rotate(-5deg) translateY(8px);
-  }
-
-  .car.damage4 .smoke,
-  .car.damage4 .crack,
-  .car.damage4 .ko {
-    opacity: 1;
-  }
-
-  .car.damage4 .car-body {
-    background: #8b5e5e;
+  .battle-msg {
+    position: absolute;
+    left: 50%;
+    top: 18px;
+    transform: translateX(-50%);
+    background: rgba(255,255,255,0.92);
+    border: 3px solid #ffd25d;
+    border-radius: 999px;
+    padding: 8px 18px;
+    font-weight: bold;
+    font-size: clamp(15px, 2.5vw, 21px);
+    z-index: 25;
+    text-align: center;
   }
 
   .question-panel {
-    margin-top: 18px;
-    display: grid;
-    grid-template-columns: 1.2fr 2fr;
-    gap: 14px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
   }
 
   .question-box {
@@ -488,99 +750,72 @@
   }
 
   .question {
-    font-size: clamp(34px, 8vw, 64px);
+    margin-top: 8px;
+    font-size: clamp(36px, 8vw, 66px);
     font-weight: bold;
-    color: #1d4ed8;
-    margin: 8px 0;
+    color: #2855c5;
+  }
+
+  .message {
+    min-height: 44px;
+    margin-top: 12px;
+    font-size: clamp(17px, 2.7vw, 23px);
+    font-weight: bold;
+    color: #a45700;
+    text-align: center;
+  }
+
+  .spell-btn {
+    margin-top: 10px;
+    width: 100%;
+    display: none;
+    color: white;
+    background: linear-gradient(180deg, #b896ff, #6f59f5);
+    box-shadow: 0 6px 0 #4731ae;
+  }
+
+  .spell-btn.show {
+    display: block;
+    animation: bob 0.6s infinite alternate;
+  }
+
+  @keyframes bob {
+    from { transform: scale(1); }
+    to { transform: scale(1.03); }
   }
 
   .answer-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     gap: 12px;
+    margin-top: 8px;
   }
 
-  .answer-btn,
-  .main-btn {
-    border: none;
-    border-radius: 18px;
-    padding: 15px;
-    font-size: clamp(20px, 4vw, 30px);
-    cursor: pointer;
-    box-shadow: 0 6px 0 #8a6d00;
-    background: #ffdf5a;
-    color: #243047;
-    transition: 0.1s;
-  }
-
-  .answer-btn:active,
-  .main-btn:active {
-    transform: translateY(5px);
-    box-shadow: 0 1px 0 #8a6d00;
+  .answer-btn {
+    background: #ffe376;
+    color: var(--ink);
+    box-shadow: 0 6px 0 #b89210;
   }
 
   .answer-btn.correct {
-    background: #7ee787;
-    box-shadow: 0 6px 0 #2f8a3d;
+    background: var(--green);
+    box-shadow: 0 6px 0 var(--green-dark);
   }
 
   .answer-btn.wrong {
-    background: #ff8a8a;
-    box-shadow: 0 6px 0 #b83232;
-  }
-
-  .blast-btn {
-    width: 100%;
-    margin-top: 12px;
-    background: linear-gradient(180deg, #88f7ff, #3086ff);
-    color: white;
-    box-shadow: 0 6px 0 #174ea6;
-    display: none;
-  }
-
-  .blast-btn.show {
-    display: block;
-    animation: pop 0.6s infinite alternate;
-  }
-
-  @keyframes pop {
-    from { transform: scale(1); }
-    to { transform: scale(1.03); }
-  }
-
-  .message {
-    margin-top: 10px;
-    min-height: 42px;
-    font-size: clamp(17px, 3vw, 23px);
-    font-weight: bold;
-    text-align: center;
-    color: #b45309;
-  }
-
-  .small {
-    font-size: 14px;
-    color: #4b5563;
-    line-height: 1.35;
-  }
-
-  .footer {
-    text-align: center;
-    margin: 14px 0 4px;
-    font-size: 14px;
-    color: #374151;
-    font-weight: bold;
+    background: var(--red);
+    box-shadow: 0 6px 0 var(--red-dark);
   }
 
   .victory {
     position: absolute;
     inset: 0;
-    background: #ffffffdd;
     display: none;
     align-items: center;
     justify-content: center;
-    text-align: center;
-    z-index: 20;
-    padding: 20px;
+    background: rgba(255,255,255,0.84);
+    z-index: 40;
+    padding: 18px;
   }
 
   .victory.show {
@@ -588,270 +823,501 @@
   }
 
   .victory-card {
-    background: #fff7d6;
+    background: #fff7d7;
     border: 5px solid #ffb703;
-    border-radius: 30px;
+    border-radius: 28px;
+    box-shadow: 0 10px 0 #d48200;
     padding: 22px;
-    max-width: 560px;
-    box-shadow: 0 10px 0 #d97706;
+    max-width: 580px;
+    text-align: center;
   }
 
-  .victory h2 {
-    font-size: clamp(34px, 8vw, 56px);
+  .victory-title {
+    font-size: clamp(30px, 6vw, 54px);
     color: #ff7a00;
-    margin: 0 0 10px;
+    font-weight: bold;
+    margin-bottom: 8px;
   }
 
-  .dance {
-    font-size: 54px;
-    animation: dance 0.35s infinite alternate;
+  .dance-emoji {
+    font-size: 56px;
+    animation: wiggle 0.35s infinite alternate;
   }
 
-  @keyframes dance {
-    from { transform: rotate(-8deg) translateY(0); }
-    to { transform: rotate(8deg) translateY(-8px); }
+  @keyframes wiggle {
+    from { transform: rotate(-10deg) translateY(0); }
+    to { transform: rotate(10deg) translateY(-8px); }
   }
 
-  @media (max-width: 760px) {
-    .top-panel,
-    .question-panel {
+  .footer {
+    text-align: center;
+    margin: 8px 0 4px;
+    color: #425162;
+    font-size: 14px;
+    font-weight: bold;
+  }
+
+  @media (max-width: 860px) {
+    .top-grid,
+    .bottom-grid {
       grid-template-columns: 1fr;
+      gap: 10px;
+    }
+
+    .layout {
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .title-card {
+      padding: 10px;
+      border-radius: 18px;
+    }
+
+    h1 {
+      font-size: clamp(25px, 7vw, 34px);
+      line-height: 1.1;
+    }
+
+    .subtitle {
+      font-size: clamp(14px, 4vw, 17px);
+    }
+
+    .card {
+      padding: 10px;
+      border-radius: 18px;
+    }
+
+    .card h2 {
+      font-size: 18px;
+    }
+
+    .status-row {
+      font-size: 16px;
+    }
+
+    .stars {
+      font-size: 22px;
+      letter-spacing: 2px;
     }
 
     .battlefield {
-      min-height: 300px;
+      min-height: 270px;
+      border-radius: 20px;
     }
 
-    .hero-zone {
-      left: 0;
-      transform: scale(0.82);
-      transform-origin: bottom left;
+    .battle-msg {
+      top: 8px;
+      width: calc(100% - 20px);
+      font-size: 14px;
+      border-radius: 16px;
+      padding: 6px 10px;
     }
 
-    .car-zone {
-      right: -22px;
-      transform: scale(0.82);
-      transform-origin: bottom right;
+    .ground {
+      bottom: 48px;
     }
 
-    .beam {
-      left: 120px;
-      top: 138px;
+    .wizard-zone {
+      left: -22px;
+      bottom: 12px;
+      transform: scale(0.68);
+      transform-origin: left bottom;
     }
 
-    @keyframes fireBeam {
-      0% {
-        width: 0;
-        opacity: 0;
-      }
-      20% {
-        opacity: 1;
-      }
-      70% {
-        width: calc(100vw - 250px);
-        opacity: 1;
-      }
-      100% {
-        width: calc(100vw - 250px);
-        opacity: 0;
-      }
+    .hamster-zone {
+      right: -28px;
+      bottom: 14px;
+      transform: scale(0.68);
+      transform-origin: right bottom;
+    }
+
+    .spell-beam {
+      left: 95px;
+      top: 145px;
+      height: 18px;
+    }
+
+    @keyframes shoot {
+      0% { width: 0; opacity: 0; }
+      15% { opacity: 1; }
+      70% { width: calc(100vw - 205px); opacity: 1; }
+      100% { width: calc(100vw - 205px); opacity: 0; }
+    }
+
+    .question {
+      font-size: clamp(38px, 13vw, 56px);
+      margin: 4px 0;
+    }
+
+    .answer-grid {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+    }
+
+    .answer-btn,
+    .main-btn,
+    .spell-btn {
+      font-size: clamp(18px, 5vw, 24px);
+      padding: 13px 10px;
+    }
+
+    .message {
+      font-size: clamp(16px, 4.5vw, 20px);
+      min-height: 38px;
+    }
+
+    .victory-card {
+      padding: 16px;
+      border-radius: 22px;
+    }
+
+    .victory-title {
+      font-size: clamp(30px, 9vw, 42px);
+    }
+  }
+
+  @media (max-width: 420px) {
+    .battlefield {
+      min-height: 245px;
+    }
+
+    .wizard-zone {
+      left: -30px;
+      bottom: 4px;
+      transform: scale(0.6);
+    }
+
+    .hamster-zone {
+      right: -38px;
+      bottom: 5px;
+      transform: scale(0.6);
+    }
+
+    .spell-beam {
+      left: 82px;
+      top: 137px;
+      height: 16px;
+    }
+
+    @keyframes shoot {
+      0% { width: 0; opacity: 0; }
+      15% { opacity: 1; }
+      70% { width: calc(100vw - 175px); opacity: 1; }
+      100% { width: calc(100vw - 175px); opacity: 0; }
+    }
+
+    .answer-btn {
+      min-height: 58px;
+      font-size: 22px;
+    }
+
+    .main-btn,
+    .spell-btn {
+      font-size: 20px;
+    }
+
+    .small {
+      font-size: 13px;
     }
   }
 </style>
 </head>
 
 <body>
-<div class="app">
-  <header>
-    <h1>⚡ Multiplication Power Blast ⚡</h1>
-    <div class="subtitle">Get 3 correct answers in a row to charge your hero. 4 blasts will spoil the car!</div>
-  </header>
-
-  <section class="top-panel">
-    <div class="card">
-      <h2>Choose Practice</h2>
-      <select id="tableSelect">
-        <option value="mixed">Mixed ×2 to ×9</option>
-        <option value="2">2 times table</option>
-        <option value="3">3 times table</option>
-        <option value="4">4 times table</option>
-        <option value="5">5 times table</option>
-        <option value="6">6 times table</option>
-        <option value="7">7 times table</option>
-        <option value="8">8 times table</option>
-        <option value="9">9 times table</option>
-      </select>
-      <button class="main-btn" style="width:100%; margin-top:10px;" onclick="restartGame()">Restart Game</button>
+  <div class="app">
+    <div class="title-card">
+      <h1>🪄 Multiplication Wizard: Rescue the Trapped Hamster! 🐹</h1>
+      <div class="subtitle">
+        Get <strong>3 correct answers in a row</strong> to charge a spell. Cast <strong>4 spells</strong> to rescue the hamster!
+      </div>
     </div>
 
-    <div class="card">
-      <h2>Power Charge</h2>
-      <div class="status-row">
-        <span>Streak</span>
-        <span id="streakText">0 / 3</span>
-      </div>
-      <div class="power-wrap">
-        <div class="power-fill" id="powerFill"></div>
-      </div>
-      <div class="small">Correct answers fill the power meter. A wrong answer resets the current streak only.</div>
-    </div>
+    <div class="layout">
+      <div class="top-grid">
+        <div class="card">
+          <h2>Choose Practice</h2>
+          <select id="tableSelect">
+            <option value="mixed">Mixed ×2 to ×12</option>
+            <option value="2">2 times table</option>
+            <option value="3">3 times table</option>
+            <option value="4">4 times table</option>
+            <option value="5">5 times table</option>
+            <option value="6">6 times table</option>
+            <option value="7">7 times table</option>
+            <option value="8">8 times table</option>
+            <option value="9">9 times table</option>
+            <option value="10">10 times table</option>
+            <option value="11">11 times table</option>
+            <option value="12">12 times table</option>
+          </select>
 
-    <div class="card">
-      <h2>Car HP</h2>
-      <div class="status-row">
-        <span>Blasts</span>
-        <span id="blastText">0 / 4</span>
-      </div>
-      <div class="hearts" id="hearts">❤️❤️❤️❤️</div>
-      <div class="small">Each energy blast removes 1 HP from the car.</div>
-    </div>
-  </section>
-
-  <section class="battlefield">
-    <div class="ground-line"></div>
-
-    <div class="hero-zone" id="heroZone">
-      <div class="aura"></div>
-      <div class="hero">
-        <div class="hair"></div>
-        <div class="head">
-          <div class="eye left"></div>
-          <div class="eye right"></div>
+          <button class="main-btn" onclick="restartGame()">Restart Game</button>
         </div>
-        <div class="body"></div>
-        <div class="belt"></div>
-        <div class="arm left"></div>
-        <div class="arm right"></div>
-        <div class="leg left"></div>
-        <div class="leg right"></div>
-      </div>
-    </div>
 
-    <div class="beam" id="beam"></div>
+        <div class="card">
+          <h2>Spell Charge</h2>
+          <div class="status-row">
+            <span>Streak</span>
+            <span id="streakText">0 / 3</span>
+          </div>
 
-    <div class="car-zone">
-      <div class="car" id="car">
-        <div class="smoke">💨</div>
-        <div class="crack">⚡</div>
-        <div class="ko">KO!</div>
-        <div class="car-top">
-          <div class="window one"></div>
-          <div class="window two"></div>
+          <div class="meter">
+            <div class="meter-fill" id="chargeFill"></div>
+          </div>
+
+          <div class="small">
+            Each correct answer fills the magic meter. A wrong answer resets the current streak only.
+          </div>
         </div>
-        <div class="car-body"></div>
-        <div class="wheel left"></div>
-        <div class="wheel right"></div>
+
+        <div class="card">
+          <h2>Hamster Rescue</h2>
+          <div class="status-row">
+            <span>Spells Cast</span>
+            <span id="spellsText">0 / 4</span>
+          </div>
+
+          <div class="stars" id="spellStars">☆ ☆ ☆ ☆</div>
+
+          <div class="small">
+            Cast 4 magic spells to crack the bubble and rescue the hamster.
+          </div>
+        </div>
+      </div>
+
+      <div class="card battlefield">
+        <div class="battle-msg" id="battleMsg">Help the wizard rescue the hamster!</div>
+        <div class="ground"></div>
+
+        <div class="wizard-zone" id="wizardZone">
+          <div class="sparkle-aura"></div>
+
+          <div class="magic-stars">
+            <span>✨</span>
+            <span>✨</span>
+            <span>✨</span>
+            <span>✨</span>
+            <span>✨</span>
+          </div>
+
+          <div class="wizard">
+            <div class="top-hat">
+              <div class="hat-band"></div>
+            </div>
+
+            <div class="head">
+              <div class="eye left"></div>
+              <div class="eye right"></div>
+              <div class="smile"></div>
+            </div>
+
+            <div class="cape"></div>
+
+            <div class="robe">
+              <div class="robe-star s1">★</div>
+              <div class="robe-star s2">★</div>
+              <div class="robe-star s3">★</div>
+            </div>
+
+            <div class="arm-left"></div>
+            <div class="arm-right"></div>
+            <div class="wand"></div>
+
+            <div class="legs">
+              <div class="leg left"></div>
+              <div class="leg right"></div>
+              <div class="shoe left"></div>
+              <div class="shoe right"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="spell-beam" id="spellBeam"></div>
+
+        <div class="hamster-zone" id="hamsterZone">
+          <div class="freedom-stars">
+            <span>⭐</span>
+            <span>⭐</span>
+            <span>⭐</span>
+            <span>⭐</span>
+            <span>⭐</span>
+          </div>
+
+          <div class="bubble">
+            <div class="bubble-glint"></div>
+            <div class="crack cr1">⚡</div>
+            <div class="crack cr2">⚡</div>
+            <div class="crack cr3">⚡</div>
+          </div>
+
+          <div class="hamster">
+            <div class="ear left"></div>
+            <div class="ear right"></div>
+
+            <div class="ham-body"></div>
+
+            <div class="ham-face">
+              <div class="ham-eye left"></div>
+              <div class="ham-eye right"></div>
+              <div class="nose"></div>
+              <div class="mouth"></div>
+            </div>
+
+            <div class="paw left"></div>
+            <div class="paw right"></div>
+
+            <div class="ham-legs">
+              <div class="ham-foot left"></div>
+              <div class="ham-foot right"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="victory" id="victory">
+          <div class="victory-card">
+            <div class="dance-emoji">🐹✨🪄</div>
+            <div class="victory-title">Hamster Rescued!</div>
+            <div style="font-size:22px; font-weight:bold; line-height:1.4; margin-bottom:14px;">
+              Well done! The hamster is free and doing a happy little dance!
+            </div>
+            <button class="main-btn" onclick="restartGame()" style="margin-top:0;">Play Again</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="bottom-grid">
+        <div class="card question-panel">
+          <div class="question-box">
+            <h2>Question</h2>
+            <div class="question" id="questionText">3 × 4</div>
+            <button class="spell-btn" id="castBtn" onclick="castSpell()">Cast Spell!</button>
+            <div class="message" id="messageText">Answer correctly to charge the wizard’s magic!</div>
+          </div>
+        </div>
+
+        <div class="card">
+          <h2>Choose the Answer</h2>
+          <div class="answer-grid" id="answerGrid"></div>
+        </div>
       </div>
     </div>
 
-    <div class="victory" id="victory">
-      <div class="victory-card">
-        <div class="dance">🕺⚡</div>
-        <h2>Mission Complete!</h2>
-        <p style="font-size:22px; font-weight:bold;">
-          The car is spoilt! Your Math Energy Hero does a silly victory dance!
-        </p>
-        <button class="main-btn" onclick="restartGame()">Play Again</button>
-      </div>
-    </div>
-  </section>
-
-  <section class="question-panel">
-    <div class="card question-box">
-      <h2>Question</h2>
-      <div class="question" id="question">3 × 4</div>
-      <button class="main-btn blast-btn" id="blastBtn" onclick="releaseBlast()">Release Energy Blast!</button>
-      <div class="message" id="message">Answer correctly to charge your power!</div>
-    </div>
-
-    <div class="card">
-      <h2>Choose the Answer</h2>
-      <div class="answer-grid" id="answers"></div>
-    </div>
-  </section>
-
-  <div class="footer">
-    Designed by Lim Kim Sze © 2026
+    <div class="footer">Designed by Lim Kim Sze © 2026</div>
   </div>
-</div>
 
 <script>
+  let streak = 0;
+  let spellsCast = 0;
   let currentA = 0;
   let currentB = 0;
   let correctAnswer = 0;
-
-  let streak = 0;
-  let blasts = 0;
   let locked = false;
   let gameComplete = false;
 
-  const questionEl = document.getElementById("question");
-  const answersEl = document.getElementById("answers");
-  const messageEl = document.getElementById("message");
-  const streakText = document.getElementById("streakText");
-  const blastText = document.getElementById("blastText");
-  const powerFill = document.getElementById("powerFill");
-  const heroZone = document.getElementById("heroZone");
-  const car = document.getElementById("car");
-  const beam = document.getElementById("beam");
-  const blastBtn = document.getElementById("blastBtn");
-  const hearts = document.getElementById("hearts");
-  const victory = document.getElementById("victory");
   const tableSelect = document.getElementById("tableSelect");
+  const streakText = document.getElementById("streakText");
+  const spellsText = document.getElementById("spellsText");
+  const spellStars = document.getElementById("spellStars");
+  const chargeFill = document.getElementById("chargeFill");
+  const questionText = document.getElementById("questionText");
+  const answerGrid = document.getElementById("answerGrid");
+  const messageText = document.getElementById("messageText");
+  const castBtn = document.getElementById("castBtn");
+  const wizardZone = document.getElementById("wizardZone");
+  const hamsterZone = document.getElementById("hamsterZone");
+  const spellBeam = document.getElementById("spellBeam");
+  const victory = document.getElementById("victory");
+  const battleMsg = document.getElementById("battleMsg");
 
   function rand(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
   }
 
-  function shuffle(array) {
-    return array.sort(() => Math.random() - 0.5);
+  function shuffle(arr) {
+    return arr.sort(() => Math.random() - 0.5);
+  }
+
+  function updateUI() {
+    streakText.textContent = `${streak} / 3`;
+    spellsText.textContent = `${spellsCast} / 4`;
+    chargeFill.style.width = `${(streak / 3) * 100}%`;
+
+    const filled = "★ ".repeat(spellsCast).trim();
+    const empty = "☆ ".repeat(4 - spellsCast).trim();
+    spellStars.textContent = (filled + " " + empty).trim();
+
+    wizardZone.classList.remove("charge1", "charge2", "charge3");
+
+    if (streak === 1) wizardZone.classList.add("charge1");
+    if (streak === 2) wizardZone.classList.add("charge2");
+    if (streak === 3) wizardZone.classList.add("charge3");
+
+    hamsterZone.className = "hamster-zone";
+
+    if (spellsCast === 1) hamsterZone.classList.add("stage1");
+    if (spellsCast === 2) hamsterZone.classList.add("stage2");
+    if (spellsCast === 3) hamsterZone.classList.add("stage3");
+    if (spellsCast >= 4) hamsterZone.classList.add("stage4");
+  }
+
+  function getFactors() {
+    const selected = tableSelect.value;
+
+    if (selected === "mixed") {
+      currentA = rand(2, 12);
+    } else {
+      currentA = Number(selected);
+    }
+
+    currentB = rand(2, 12);
+    correctAnswer = currentA * currentB;
   }
 
   function makeQuestion() {
     if (gameComplete) return;
 
     locked = false;
-    blastBtn.classList.remove("show");
+    castBtn.classList.remove("show");
 
-    const selected = tableSelect.value;
+    getFactors();
 
-    if (selected === "mixed") {
-      currentA = rand(2, 9);
-    } else {
-      currentA = Number(selected);
-    }
-
-    currentB = rand(2, 9);
-    correctAnswer = currentA * currentB;
-
-    questionEl.textContent = `${currentA} × ${currentB}`;
+    questionText.textContent = `${currentA} × ${currentB}`;
 
     const options = new Set();
     options.add(correctAnswer);
 
     while (options.size < 4) {
-      let wrong = correctAnswer + rand(-12, 12);
+      const variation = rand(-10, 10);
+      const wrong = correctAnswer + variation;
+
       if (wrong > 0 && wrong !== correctAnswer) {
         options.add(wrong);
       }
     }
 
     const finalOptions = shuffle([...options]);
+    answerGrid.innerHTML = "";
 
-    answersEl.innerHTML = "";
     finalOptions.forEach(value => {
       const btn = document.createElement("button");
       btn.className = "answer-btn";
       btn.textContent = value;
       btn.onclick = () => checkAnswer(btn, value);
-      answersEl.appendChild(btn);
+      answerGrid.appendChild(btn);
+    });
+  }
+
+  function disableAnswers() {
+    document.querySelectorAll(".answer-btn").forEach(btn => {
+      btn.disabled = true;
     });
   }
 
   function checkAnswer(button, value) {
     if (locked || gameComplete) return;
 
-    const allButtons = document.querySelectorAll(".answer-btn");
+    locked = true;
 
     if (value === correctAnswer) {
       button.classList.add("correct");
@@ -859,97 +1325,91 @@
 
       if (streak >= 3) {
         streak = 3;
-        locked = true;
-        messageEl.textContent = "Power ready! Press Release Energy Blast!";
-        blastBtn.classList.add("show");
-        allButtons.forEach(btn => btn.disabled = true);
+        messageText.textContent = "Spell ready! Press Cast Spell!";
+        battleMsg.textContent = "The wizard is ready to cast a magic spell!";
+        castBtn.classList.add("show");
+        disableAnswers();
+      } else if (streak === 1) {
+        messageText.textContent = "Good job! The wand is glowing!";
+        battleMsg.textContent = "The wizard’s magic is getting stronger!";
+        disableAnswers();
+        setTimeout(makeQuestion, 700);
       } else {
-        messageEl.textContent = streak === 1
-          ? "Good! Power is charging!"
-          : "Combo! One more correct answer to blast!";
-        locked = true;
-        allButtons.forEach(btn => btn.disabled = true);
-        setTimeout(makeQuestion, 750);
+        messageText.textContent = "Great! One more correct answer to charge the spell!";
+        battleMsg.textContent = "The magic circle is glowing brighter!";
+        disableAnswers();
+        setTimeout(makeQuestion, 800);
       }
     } else {
       button.classList.add("wrong");
       streak = 0;
-      locked = true;
-      messageEl.textContent = "Oops! Streak reset. Try the next one!";
-      allButtons.forEach(btn => btn.disabled = true);
+      messageText.textContent = "Oops! The spell charge reset. Try the next one!";
+      battleMsg.textContent = "Keep going! You can still rescue the hamster!";
+      disableAnswers();
+      updateUI();
       setTimeout(makeQuestion, 950);
+      return;
     }
 
     updateUI();
   }
 
-  function releaseBlast() {
+  function castSpell() {
     if (streak < 3 || gameComplete) return;
 
     locked = true;
-    blastBtn.classList.remove("show");
-    heroZone.classList.add("blasting");
-    beam.classList.remove("fire");
+    castBtn.classList.remove("show");
+    wizardZone.classList.add("casting");
 
-    void beam.offsetWidth;
-    beam.classList.add("fire");
+    spellBeam.classList.remove("fire");
+    void spellBeam.offsetWidth;
+    spellBeam.classList.add("fire");
 
-    messageEl.textContent = "Energy Blast!";
+    messageText.textContent = "Magic spell cast!";
+    battleMsg.textContent = "The spell hits the magic bubble!";
 
     setTimeout(() => {
-      blasts++;
+      wizardZone.classList.remove("casting");
+      spellsCast++;
       streak = 0;
-      heroZone.classList.remove("blasting");
       updateUI();
 
-      if (blasts >= 4) {
-        completeGame();
+      if (spellsCast >= 4) {
+        finishGame();
+      } else if (spellsCast === 1) {
+        messageText.textContent = "Nice! A small crack appeared!";
+        battleMsg.textContent = "The bubble is cracking!";
+        setTimeout(makeQuestion, 850);
+      } else if (spellsCast === 2) {
+        messageText.textContent = "Well done! More cracks appeared!";
+        battleMsg.textContent = "The hamster is getting closer to freedom!";
+        setTimeout(makeQuestion, 850);
       } else {
-        messageEl.textContent = "Nice blast! Charge again for the next attack!";
-        setTimeout(makeQuestion, 700);
+        messageText.textContent = "Amazing! The bubble is almost open!";
+        battleMsg.textContent = "One more spell will rescue the hamster!";
+        setTimeout(makeQuestion, 850);
       }
     }, 850);
   }
 
-  function updateUI() {
-    streakText.textContent = `${streak} / 3`;
-    blastText.textContent = `${blasts} / 4`;
-
-    const powerPercent = (streak / 3) * 100;
-    powerFill.style.width = `${powerPercent}%`;
-
-    heroZone.classList.remove("power1", "power2", "power3");
-    if (streak === 1) heroZone.classList.add("power1");
-    if (streak === 2) heroZone.classList.add("power2");
-    if (streak === 3) heroZone.classList.add("power3");
-
-    car.className = "car";
-    if (blasts >= 1) car.classList.add("damage1");
-    if (blasts >= 2) car.classList.add("damage2");
-    if (blasts >= 3) car.classList.add("damage3");
-    if (blasts >= 4) car.classList.add("damage4");
-
-    const hpLeft = Math.max(0, 4 - blasts);
-    hearts.textContent = "❤️".repeat(hpLeft) + "🖤".repeat(4 - hpLeft);
-  }
-
-  function completeGame() {
+  function finishGame() {
     gameComplete = true;
-    messageEl.textContent = "Mission complete! Well done!";
+    messageText.textContent = "You rescued the hamster! Well done!";
+    battleMsg.textContent = "Hooray! The hamster is free!";
     victory.classList.add("show");
-
-    document.querySelectorAll(".answer-btn").forEach(btn => {
-      btn.disabled = true;
-    });
+    disableAnswers();
   }
 
   function restartGame() {
     streak = 0;
-    blasts = 0;
+    spellsCast = 0;
     locked = false;
     gameComplete = false;
+
     victory.classList.remove("show");
-    messageEl.textContent = "Answer correctly to charge your power!";
+    messageText.textContent = "Answer correctly to charge the wizard’s magic!";
+    battleMsg.textContent = "Help the wizard rescue the hamster!";
+
     updateUI();
     makeQuestion();
   }
@@ -959,4 +1419,4 @@
   restartGame();
 </script>
 </body>
-  </html>
+</html>
