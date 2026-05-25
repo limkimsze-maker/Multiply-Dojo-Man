@@ -13,7 +13,6 @@
     --bg2: #fff7d6;
     --card: #ffffff;
     --ink: #243047;
-    --blue: #5cb6ff;
     --yellow: #ffd94d;
     --yellow-dark: #d6a300;
     --green: #7be495;
@@ -23,8 +22,7 @@
     --purple: #8b5cf6;
   }
 
-  html,
-  body {
+  html, body {
     margin: 0;
     padding: 0;
     width: 100%;
@@ -102,8 +100,7 @@
     font-size: 20px;
   }
 
-  select,
-  button {
+  select, button {
     font-family: inherit;
     font-weight: bold;
     min-height: 48px;
@@ -118,9 +115,7 @@
     background: #fffdf3;
   }
 
-  .main-btn,
-  .answer-btn,
-  .spell-btn {
+  .main-btn, .answer-btn, .spell-btn {
     border: none;
     border-radius: 18px;
     cursor: pointer;
@@ -129,9 +124,7 @@
     transition: transform 0.08s ease;
   }
 
-  .main-btn:active,
-  .answer-btn:active,
-  .spell-btn:active {
+  .main-btn:active, .answer-btn:active, .spell-btn:active {
     transform: translateY(4px);
   }
 
@@ -141,6 +134,11 @@
     background: var(--yellow);
     color: var(--ink);
     box-shadow: 0 6px 0 var(--yellow-dark);
+  }
+
+  .sound-btn {
+    background: #dbeafe;
+    box-shadow: 0 6px 0 #60a5fa;
   }
 
   .status-row {
@@ -203,8 +201,7 @@
     background: #3e9f3f;
   }
 
-  .wizard-zone,
-  .hamster-zone {
+  .wizard-zone, .hamster-zone {
     position: absolute;
     bottom: 34px;
   }
@@ -395,8 +392,7 @@
     z-index: 1;
   }
 
-  .arm-left,
-  .arm-right {
+  .arm-left, .arm-right {
     position: absolute;
     top: 84px;
     height: 14px;
@@ -739,12 +735,6 @@
     text-align: center;
   }
 
-  .question-panel {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-  }
-
   .question-box {
     text-align: center;
   }
@@ -858,8 +848,7 @@
   }
 
   @media (max-width: 860px) {
-    .top-grid,
-    .bottom-grid {
+    .top-grid, .bottom-grid {
       grid-template-columns: 1fr;
       gap: 10px;
     }
@@ -876,7 +865,6 @@
 
     h1 {
       font-size: clamp(25px, 7vw, 34px);
-      line-height: 1.1;
     }
 
     .subtitle {
@@ -955,9 +943,7 @@
       gap: 10px;
     }
 
-    .answer-btn,
-    .main-btn,
-    .spell-btn {
+    .answer-btn, .main-btn, .spell-btn {
       font-size: clamp(18px, 5vw, 24px);
       padding: 13px 10px;
     }
@@ -965,15 +951,6 @@
     .message {
       font-size: clamp(16px, 4.5vw, 20px);
       min-height: 38px;
-    }
-
-    .victory-card {
-      padding: 16px;
-      border-radius: 22px;
-    }
-
-    .victory-title {
-      font-size: clamp(30px, 9vw, 42px);
     }
   }
 
@@ -1012,8 +989,7 @@
       font-size: 22px;
     }
 
-    .main-btn,
-    .spell-btn {
+    .main-btn, .spell-btn {
       font-size: 20px;
     }
 
@@ -1052,6 +1028,7 @@
             <option value="12">12 times table</option>
           </select>
 
+          <button class="main-btn sound-btn" onclick="unlockAudio()">🔊 Unlock Sound</button>
           <button class="main-btn" onclick="restartGame()">Restart Game</button>
         </div>
 
@@ -1061,11 +1038,9 @@
             <span>Streak</span>
             <span id="streakText">0 / 3</span>
           </div>
-
           <div class="meter">
             <div class="meter-fill" id="chargeFill"></div>
           </div>
-
           <div class="small">
             Each correct answer fills the magic meter. A wrong answer resets the current streak only.
           </div>
@@ -1077,9 +1052,7 @@
             <span>Spells Cast</span>
             <span id="spellsText">0 / 4</span>
           </div>
-
           <div class="stars" id="spellStars">☆ ☆ ☆ ☆</div>
-
           <div class="small">
             Cast 4 magic spells to crack the bubble and rescue the hamster.
           </div>
@@ -1092,38 +1065,26 @@
 
         <div class="wizard-zone" id="wizardZone">
           <div class="sparkle-aura"></div>
-
           <div class="magic-stars">
-            <span>✨</span>
-            <span>✨</span>
-            <span>✨</span>
-            <span>✨</span>
-            <span>✨</span>
+            <span>✨</span><span>✨</span><span>✨</span><span>✨</span><span>✨</span>
           </div>
 
           <div class="wizard">
-            <div class="top-hat">
-              <div class="hat-band"></div>
-            </div>
-
+            <div class="top-hat"><div class="hat-band"></div></div>
             <div class="head">
               <div class="eye left"></div>
               <div class="eye right"></div>
               <div class="smile"></div>
             </div>
-
             <div class="cape"></div>
-
             <div class="robe">
               <div class="robe-star s1">★</div>
               <div class="robe-star s2">★</div>
               <div class="robe-star s3">★</div>
             </div>
-
             <div class="arm-left"></div>
             <div class="arm-right"></div>
             <div class="wand"></div>
-
             <div class="legs">
               <div class="leg left"></div>
               <div class="leg right"></div>
@@ -1137,11 +1098,7 @@
 
         <div class="hamster-zone" id="hamsterZone">
           <div class="freedom-stars">
-            <span>⭐</span>
-            <span>⭐</span>
-            <span>⭐</span>
-            <span>⭐</span>
-            <span>⭐</span>
+            <span>⭐</span><span>⭐</span><span>⭐</span><span>⭐</span><span>⭐</span>
           </div>
 
           <div class="bubble">
@@ -1154,19 +1111,15 @@
           <div class="hamster">
             <div class="ear left"></div>
             <div class="ear right"></div>
-
             <div class="ham-body"></div>
-
             <div class="ham-face">
               <div class="ham-eye left"></div>
               <div class="ham-eye right"></div>
               <div class="nose"></div>
               <div class="mouth"></div>
             </div>
-
             <div class="paw left"></div>
             <div class="paw right"></div>
-
             <div class="ham-legs">
               <div class="ham-foot left"></div>
               <div class="ham-foot right"></div>
@@ -1187,7 +1140,7 @@
       </div>
 
       <div class="bottom-grid">
-        <div class="card question-panel">
+        <div class="card">
           <div class="question-box">
             <h2>Question</h2>
             <div class="question" id="questionText">3 × 4</div>
@@ -1215,6 +1168,9 @@
   let locked = false;
   let gameComplete = false;
 
+  let audioCtx = null;
+  let audioUnlocked = false;
+
   const tableSelect = document.getElementById("tableSelect");
   const streakText = document.getElementById("streakText");
   const spellsText = document.getElementById("spellsText");
@@ -1229,6 +1185,66 @@
   const spellBeam = document.getElementById("spellBeam");
   const victory = document.getElementById("victory");
   const battleMsg = document.getElementById("battleMsg");
+
+  function unlockAudio() {
+    if (!audioCtx) {
+      audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    }
+
+    if (audioCtx.state === "suspended") {
+      audioCtx.resume();
+    }
+
+    audioUnlocked = true;
+    playCorrectSound();
+    messageText.textContent = "Sound unlocked! Answer correctly to charge the wizard’s magic!";
+    battleMsg.textContent = "Sound is ready!";
+  }
+
+  function playTone(freq, duration, type = "sine", volume = 0.15, delay = 0) {
+    if (!audioUnlocked || !audioCtx) return;
+
+    const start = audioCtx.currentTime + delay;
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+
+    osc.type = type;
+    osc.frequency.setValueAtTime(freq, start);
+
+    gain.gain.setValueAtTime(0.001, start);
+    gain.gain.linearRampToValueAtTime(volume, start + 0.015);
+    gain.gain.exponentialRampToValueAtTime(0.001, start + duration);
+
+    osc.connect(gain);
+    gain.connect(audioCtx.destination);
+
+    osc.start(start);
+    osc.stop(start + duration + 0.04);
+  }
+
+  function playCorrectSound() {
+    playTone(660, 0.12, "sine", 0.13, 0);
+    playTone(880, 0.14, "sine", 0.13, 0.11);
+  }
+
+  function playWrongSound() {
+    playTone(180, 0.18, "sawtooth", 0.1, 0);
+    playTone(120, 0.22, "sawtooth", 0.09, 0.16);
+  }
+
+  function playMagicSound() {
+    playTone(440, 0.12, "triangle", 0.11, 0);
+    playTone(660, 0.12, "triangle", 0.11, 0.08);
+    playTone(990, 0.18, "triangle", 0.11, 0.16);
+    playTone(1320, 0.22, "sine", 0.09, 0.25);
+  }
+
+  function playVictorySound() {
+    playTone(523, 0.13, "sine", 0.13, 0);
+    playTone(659, 0.13, "sine", 0.13, 0.12);
+    playTone(784, 0.13, "sine", 0.13, 0.24);
+    playTone(1046, 0.28, "sine", 0.13, 0.38);
+  }
 
   function rand(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
@@ -1321,6 +1337,7 @@
 
     if (value === correctAnswer) {
       button.classList.add("correct");
+      playCorrectSound();
       streak++;
 
       if (streak >= 3) {
@@ -1342,6 +1359,7 @@
       }
     } else {
       button.classList.add("wrong");
+      playWrongSound();
       streak = 0;
       messageText.textContent = "Oops! The spell charge reset. Try the next one!";
       battleMsg.textContent = "Keep going! You can still rescue the hamster!";
@@ -1364,6 +1382,8 @@
     spellBeam.classList.remove("fire");
     void spellBeam.offsetWidth;
     spellBeam.classList.add("fire");
+
+    playMagicSound();
 
     messageText.textContent = "Magic spell cast!";
     battleMsg.textContent = "The spell hits the magic bubble!";
@@ -1396,6 +1416,7 @@
     gameComplete = true;
     messageText.textContent = "You rescued the hamster! Well done!";
     battleMsg.textContent = "Hooray! The hamster is free!";
+    playVictorySound();
     victory.classList.add("show");
     disableAnswers();
   }
@@ -1419,4 +1440,4 @@
   restartGame();
 </script>
 </body>
-</html>
+               </html>
